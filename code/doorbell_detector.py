@@ -71,8 +71,8 @@ def doorbell_callback(channel):
         doorbell_notfication()
         time.sleep(1800)
     else:
-        time.sleep(5)
-        doorbell_notfication(1800)
+        time.sleep(1800)
+        doorbell_notfication()
 
 
 def main():
