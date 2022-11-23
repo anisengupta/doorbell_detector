@@ -1,0 +1,198 @@
+
+<!DOCTYPE html>
+
+<html lang="English">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Project Guide &#8212; Doorbell Detector Documentation 0.0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/pyramid.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Code documentation!" href="code.html" />
+    <link rel="prev" title="Welcome to Doorbell Detector&#39;s documentation!" href="index.html" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+  </head><body>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="code.html" title="Code documentation!"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to Doorbell Detector&#39;s documentation!"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Doorbell Detector Documentation 0.0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Project Guide</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="project-guide">
+<h1>Project Guide<a class="headerlink" href="#project-guide" title="Permalink to this heading">¶</a></h1>
+<p>The Doorbell Detector repository contains code that is able to monitor a
+doorbell's sounds and report on whether the doorbell has been rung.</p>
+<p>The motivation for this project came through the fact when we moved house in
+February 2022, we had an outbuilding which I converted into my office during the
+spring. I was initially working from home in the dining room which was the first
+room in the house after you entered, so naturally you knew when the doorbell had rung.</p>
+<p>After a while, I then moved to the outbuilding (after creating a custom desk and
+the making sure I got WiFi) which made hearing the doorbell almost impossible.
+The only solution I had was to make sure my wife was working from home and would
+be able to text if there was somebody at the door. This however did not work when
+she worked in the office so I had to find another solution.</p>
+<p>Of course, you can get several solutions online that would be able to detect
+doorbell sounds and send a notification to your phone but buying it outright was
+no fun; I decided to make my own.</p>
+<p>Below is a guide on how I was able to achieve this simple project using a
+Raspberry Pi.</p>
+<section id="setup">
+<h2>Setup<a class="headerlink" href="#setup" title="Permalink to this heading">¶</a></h2>
+<p>The first thing I had to do was to make sure I had the relevant hardware. I knew
+that the code itself would not be hard to write, but what might be harder was the
+fact that I had to initialise it on some hardware that would be next to the
+doorbell itself. This might prove difficult as I only had experience in writing
+and testing software but I had never experimented with hardware before.</p>
+<p>I therefore turned to the solution of using a Raspberry Pi, a super small computer
+that is so simple to use that it is used by children as their first foray into
+computers and programming.</p>
+<p>Along with a Raspbery Pi, I also needed some sort of sound detector that would
+be able to detect a doorbell ring but not be too sensitive and detect footsteps,
+or people talking.</p>
+<p>I therefore bought the following items for the project:
+- Raspberry Pi (<a class="reference external" href="https://www.amazon.co.uk/gp/product/B01CD5VC92/ref=ppx_yo_dt_b_asin_title_o02_s01?ie=UTF8&amp;psc=1">https://www.amazon.co.uk/gp/product/B01CD5VC92/ref=ppx_yo_dt_b_asin_title_o02_s01?ie=UTF8&amp;psc=1</a>).
+- SD Memory Card - to make sure the Pi would have plenty of memory for Python and other modules needed to work (<a class="reference external" href="https://www.amazon.co.uk/gp/product/B073JWXGNT/ref=ppx_yo_dt_b_asin_title_o02_s00?ie=UTF8&amp;psc=1">https://www.amazon.co.uk/gp/product/B073JWXGNT/ref=ppx_yo_dt_b_asin_title_o02_s00?ie=UTF8&amp;psc=1</a>).
+- Sound Detection Microphone (<a class="reference external" href="https://www.amazon.co.uk/gp/product/B07ZHGDYF7/ref=ppx_yo_dt_b_asin_title_o03_s00?ie=UTF8&amp;psc=1">https://www.amazon.co.uk/gp/product/B07ZHGDYF7/ref=ppx_yo_dt_b_asin_title_o03_s00?ie=UTF8&amp;psc=1</a>).
+- Jumper Cables - to connect the microphone to the Pi (<a class="reference external" href="https://www.amazon.co.uk/gp/product/B074P726ZR/ref=ppx_yo_dt_b_asin_title_o03_s01?ie=UTF8&amp;psc=1">https://www.amazon.co.uk/gp/product/B074P726ZR/ref=ppx_yo_dt_b_asin_title_o03_s01?ie=UTF8&amp;psc=1</a>).</p>
+</section>
+<section id="the-process-guide">
+<h2>The Process Guide<a class="headerlink" href="#the-process-guide" title="Permalink to this heading">¶</a></h2>
+<p>I will now outline below the series of steps I took to get this project finished
+end to end.</p>
+<section id="step-1-sort-out-the-hardware">
+<h3>Step 1 - Sort out the hardware<a class="headerlink" href="#step-1-sort-out-the-hardware" title="Permalink to this heading">¶</a></h3>
+<p>The first step would be to make sure that the sound detector is properly connected
+to the Pi.</p>
+<p>To achieve this, we needed three female to female jumper cables (brown, black and white).
+The sound sensor has four prongs but we only need three of them to correctly connect them
+to the Pi:</p>
+<img alt="_images/sound_sensor.png" src="_images/sound_sensor.png" />
+<p>The prongs we need on the sensor are the power (+), the ground (GND) and the digital out signal (D0):</p>
+<img alt="_images/sound_sensor_magnified.png" src="_images/sound_sensor_magnified.png" />
+<p>When we then connect the sensor to the Pi, we should see both red lights come on (the two leds). To make
+sure that our sensor has the correct sensitivity, we need to adjust it so the second led flashes when there
+is a loud sound but not to every sound. We need a flat screwdriver to adjust the blue bit on the top
+until we achieved our desired sensitivity (turn counterclockwise until the red light dissapears then experimented
+accordingly):</p>
+<img alt="_images/sound_sensor_adjust.png" src="_images/sound_sensor_adjust.png" />
+<p>We then need to power up our Pi and make sure that the sound sensor is working accordingly:</p>
+<img alt="../images/raspberry_pi_power.png" src="../images/raspberry_pi_power.png" />
+</section>
+<section id="step-2-write-the-code">
+<h3>Step 2 - Write the code<a class="headerlink" href="#step-2-write-the-code" title="Permalink to this heading">¶</a></h3>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Project Guide</a><ul>
+<li><a class="reference internal" href="#setup">Setup</a></li>
+<li><a class="reference internal" href="#the-process-guide">The Process Guide</a><ul>
+<li><a class="reference internal" href="#step-1-sort-out-the-hardware">Step 1 - Sort out the hardware</a></li>
+<li><a class="reference internal" href="#step-2-write-the-code">Step 2 - Write the code</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="index.html"
+                          title="previous chapter">Welcome to Doorbell Detector's documentation!</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="code.html"
+                          title="next chapter">Code documentation!</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/guide.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="code.html" title="Code documentation!"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to Doorbell Detector&#39;s documentation!"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Doorbell Detector Documentation 0.0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Project Guide</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Aniruddha Sengupta.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    </div>
+  </body>
+</html>
