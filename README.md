@@ -1,4 +1,4 @@
-# driving_theory
+# doorbell_detector
 A code that helps to detect when the doorbell has been rung and sends a notification to my phone
 accordingly.
 
