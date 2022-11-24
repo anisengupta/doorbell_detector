@@ -11,8 +11,6 @@ Welcome to Doorbell Detector's documentation!
    :caption: Contents:
 
    guide
-   code
-
 
 
 Indices and tables
