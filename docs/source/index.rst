@@ -10,6 +10,9 @@ Welcome to Doorbell Detector's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   guide
+   code
+
 
 
 Indices and tables
