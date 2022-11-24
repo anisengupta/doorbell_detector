@@ -69,10 +69,10 @@ def doorbell_callback(channel):
     """
     if GPIO.input(CHANNEL):
         doorbell_notfication()
-        time.sleep(1800)
+        time.sleep(600)
     else:
-        time.sleep(1800)
         doorbell_notfication()
+        time.sleep(600)
 
 
 def main():
