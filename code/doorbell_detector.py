@@ -25,7 +25,6 @@ def read_config() -> dict:
 
 
 config = read_config()
-TOKEN = config["TOKEN"]
 
 
 def pushbullet_notification(title: str, body: str, TOKEN: str) -> requests.post:
@@ -51,9 +50,11 @@ def pushbullet_notification(title: str, body: str, TOKEN: str) -> requests.post:
         pass
 
 
-def doorbell_notfication():
+def doorbell_notfication(config):
     now = datetime.datetime.now()
     print("Sound Detected! - Sending notification")
+
+    TOKEN = config["TOKEN"]
     pushbullet_notification(
         "Doorbell!",
         f'There is somebody at the door - {now.strftime("%Y-%m-%d %H:%M:%S")}',
@@ -68,10 +69,10 @@ def doorbell_callback(channel):
 
     """
     if GPIO.input(CHANNEL):
-        doorbell_notfication()
+        doorbell_notfication(config)
         time.sleep(600)
     else:
-        doorbell_notfication()
+        doorbell_notfication(config)
         time.sleep(600)
 
 
