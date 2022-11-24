@@ -25,6 +25,8 @@ I therefore bought the following items for the project:
 
 Process Guide
 -------------
+We will now outline the steps we took to complete this project, there were
+only two.
 
 Step 1 - Sort out the hardware
 ******************************
@@ -60,3 +62,72 @@ working accordingly:
 
 Step 2 - Write the code
 ***********************
+We will now write code such that when there is a sound detected, we receive
+a notification on our phone.
+
+To do this, we will use the Pushbullet API to send us notifications on our
+phone. More information can be found here: https://www.pushbullet.com. Simply
+sign up and make an API token which we will use later.
+
+Once we have set up the API token, we can then use it to send notifications to
+our phone using a `post` request::
+
+    msg = {"type": "note", "title": title, "body": body}
+
+    resp = requests.post(
+        "https://api.pushbullet.com/v2/pushes",
+        data=json.dumps(msg),
+        headers={
+            "Authorization": "Bearer " + TOKEN,
+            "Content-Type": "application/json",
+        },
+    )
+
+We will then make use of the `RPI.GPIO` (https://pypi.org/project/RPi.GPIO/) 
+library to programatically listen to when the sensor is triggered::
+
+    import RPi.GPIO as GPIO
+
+    CHANNEL = 17
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setup(CHANNEL, GPIO.IN)
+
+    def doorbell_callback(channel):
+        if GPIO.input(CHANNEL):
+            doorbell_notfication(config)
+            time.sleep(600)
+        else:
+            doorbell_notfication(config)
+            time.sleep(600)
+    
+    GPIO.add_event_detect(CHANNEL, GPIO.BOTH, bouncetime=300)
+    GPIO.add_event_callback(CHANNEL, doorbell_callback)
+
+Note that we have set the function `doorbell_callback` to sleep for 600 seconds
+since we do not want to bombarded with notifications on our phone.
+A notification is sent, the function then waits 10 mins before sending another
+one.
+
+We should then get a notification on our phone accordingly. In my case,
+I built this thing to notify me when someone is ringing the doorbell and
+I am in the outbuilding or the garden:
+
+.. image:: ../images/example_notification.jpg
+
+
+Drawbacks
+---------
+
+There are a few drawbacks to this codebase and project, the first is that
+the sensor that is connected to the PI, only detects decibals and sends an
+alert accordingly.
+
+So is someone went near the Pi and shouted loudly, we would get alerted on our
+phone. If a dog also decided to bark loudly next to the Pi, the sensor would 
+still pick this up. So a point of improvement would be to use more 
+sophisticated methods to detect only the doorbell instead of all noises. 
+We may need to employ ML models to do this properly.
+
+The second drawback is that the Pi now sits besides the doorbell, so if my dog,
+Slinky, was suddenly feeling adventures and decides to chew or even sniff the
+Pi; it might put the sensor out of alignment.

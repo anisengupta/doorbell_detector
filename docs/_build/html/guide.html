@@ -68,6 +68,8 @@ footsteps, or people talking.</p>
 </ul>
 <section id="process-guide">
 <h2>Process Guide<a class="headerlink" href="#process-guide" title="Permalink to this heading">¶</a></h2>
+<p>We will now outline the steps we took to complete this project, there were
+only two.</p>
 <section id="step-1-sort-out-the-hardware">
 <h3>Step 1 - Sort out the hardware<a class="headerlink" href="#step-1-sort-out-the-hardware" title="Permalink to this heading">¶</a></h3>
 <p>The first step would be to make sure that the sound detector is properly
@@ -92,7 +94,68 @@ working accordingly:</p>
 </section>
 <section id="step-2-write-the-code">
 <h3>Step 2 - Write the code<a class="headerlink" href="#step-2-write-the-code" title="Permalink to this heading">¶</a></h3>
+<p>We will now write code such that when there is a sound detected, we receive
+a notification on our phone.</p>
+<p>To do this, we will use the Pushbullet API to send us notifications on our
+phone. More information can be found here: <a class="reference external" href="https://www.pushbullet.com">https://www.pushbullet.com</a>. Simply
+sign up and make an API token which we will use later.</p>
+<p>Once we have set up the API token, we can then use it to send notifications to
+our phone using a <cite>post</cite> request:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">msg</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;note&quot;</span><span class="p">,</span> <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="n">title</span><span class="p">,</span> <span class="s2">&quot;body&quot;</span><span class="p">:</span> <span class="n">body</span><span class="p">}</span>
+
+<span class="n">resp</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+    <span class="s2">&quot;https://api.pushbullet.com/v2/pushes&quot;</span><span class="p">,</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">msg</span><span class="p">),</span>
+    <span class="n">headers</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">&quot;Authorization&quot;</span><span class="p">:</span> <span class="s2">&quot;Bearer &quot;</span> <span class="o">+</span> <span class="n">TOKEN</span><span class="p">,</span>
+        <span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">,</span>
+    <span class="p">},</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>We will then make use of the <cite>RPI.GPIO</cite> (<a class="reference external" href="https://pypi.org/project/RPi.GPIO/">https://pypi.org/project/RPi.GPIO/</a>)
+library to programatically listen to when the sensor is triggered:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">RPi.GPIO</span> <span class="k">as</span> <span class="nn">GPIO</span>
+
+<span class="n">CHANNEL</span> <span class="o">=</span> <span class="mi">17</span>
+<span class="n">GPIO</span><span class="o">.</span><span class="n">setmode</span><span class="p">(</span><span class="n">GPIO</span><span class="o">.</span><span class="n">BCM</span><span class="p">)</span>
+<span class="n">GPIO</span><span class="o">.</span><span class="n">setup</span><span class="p">(</span><span class="n">CHANNEL</span><span class="p">,</span> <span class="n">GPIO</span><span class="o">.</span><span class="n">IN</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">doorbell_callback</span><span class="p">(</span><span class="n">channel</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">GPIO</span><span class="o">.</span><span class="n">input</span><span class="p">(</span><span class="n">CHANNEL</span><span class="p">):</span>
+        <span class="n">doorbell_notfication</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">600</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">doorbell_notfication</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">600</span><span class="p">)</span>
+
+<span class="n">GPIO</span><span class="o">.</span><span class="n">add_event_detect</span><span class="p">(</span><span class="n">CHANNEL</span><span class="p">,</span> <span class="n">GPIO</span><span class="o">.</span><span class="n">BOTH</span><span class="p">,</span> <span class="n">bouncetime</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
+<span class="n">GPIO</span><span class="o">.</span><span class="n">add_event_callback</span><span class="p">(</span><span class="n">CHANNEL</span><span class="p">,</span> <span class="n">doorbell_callback</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Note that we have set the function <cite>doorbell_callback</cite> to sleep for 600 seconds
+since we do not want to bombarded with notifications on our phone.
+A notification is sent, the function then waits 10 mins before sending another
+one.</p>
+<p>We should then get a notification on our phone accordingly. In my case,
+I built this thing to notify me when someone is ringing the doorbell and
+I am in the outbuilding or the garden:</p>
+<img alt="_images/example_notification.jpg" src="_images/example_notification.jpg" />
 </section>
+</section>
+<section id="drawbacks">
+<h2>Drawbacks<a class="headerlink" href="#drawbacks" title="Permalink to this heading">¶</a></h2>
+<p>There are a few drawbacks to this codebase and project, the first is that
+the sensor that is connected to the PI, only detects decibals and sends an
+alert accordingly.</p>
+<p>So is someone went near the Pi and shouted loudly, we would get alerted on our
+phone. If a dog also decided to bark loudly next to the Pi, the sensor would
+still pick this up. So a point of improvement would be to use more
+sophisticated methods to detect only the doorbell instead of all noises.
+We may need to employ ML models to do this properly.</p>
+<p>The second drawback is that the Pi now sits besides the doorbell, so if my dog,
+Slinky, was suddenly feeling adventures and decides to chew or even sniff the
+Pi; it might put the sensor out of alignment.</p>
 </section>
 </section>
 
@@ -112,6 +175,7 @@ working accordingly:</p>
 <li><a class="reference internal" href="#step-2-write-the-code">Step 2 - Write the code</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#drawbacks">Drawbacks</a></li>
 </ul>
 </li>
 </ul>
