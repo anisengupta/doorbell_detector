@@ -47,6 +47,53 @@
             
   <section id="step-by-step-guide">
 <h1>Step by step guide<a class="headerlink" href="#step-by-step-guide" title="Permalink to this heading">¶</a></h1>
+<p>The first thing I had to do was to make sure I had the relevant hardware.
+I knew that the code itself would not be hard to write, but what might be
+harder was the fact that I had to initialise it on some hardware that would
+be next to the doorbell itself. This might prove difficult as I only had
+experience in writing and testing software but I had never experimented with
+hardware before.</p>
+<p>I therefore turned to the solution of using a Raspberry Pi, a super small
+computer that is so simple to use that it is used by children as their first
+foray into computers and programming.</p>
+<p>Along with a Raspberry Pi, I also needed some sort of sound detector that
+would be able to detect a doorbell ring but not be too sensitive and detect
+footsteps, or people talking.</p>
+<p>I therefore bought the following items for the project:</p>
+<ul class="simple">
+<li><p>Raspberry Pi (<a class="reference external" href="https://www.amazon.co.uk/gp/product/B01CD5VC92/ref=ppx_yo_dt_b_asin_title_o02_s01?ie=UTF8&amp;psc=1">https://www.amazon.co.uk/gp/product/B01CD5VC92/ref=ppx_yo_dt_b_asin_title_o02_s01?ie=UTF8&amp;psc=1</a>)</p></li>
+<li><p>SD Memory Card - to make sure the Pi would have plenty of memory for Python and other modules needed to work (<a class="reference external" href="https://www.amazon.co.uk/gp/product/B073JWXGNT/ref=ppx_yo_dt_b_asin_title_o02_s00?ie=UTF8&amp;psc=1">https://www.amazon.co.uk/gp/product/B073JWXGNT/ref=ppx_yo_dt_b_asin_title_o02_s00?ie=UTF8&amp;psc=1</a>).</p></li>
+<li><p>Sound Detection Microphone (<a class="reference external" href="https://www.amazon.co.uk/gp/product/B07ZHGDYF7/ref=ppx_yo_dt_b_asin_title_o03_s00?ie=UTF8&amp;psc=1">https://www.amazon.co.uk/gp/product/B07ZHGDYF7/ref=ppx_yo_dt_b_asin_title_o03_s00?ie=UTF8&amp;psc=1</a>).</p></li>
+<li><p>Jumper Cables - to connect the microphone to the Pi (<a class="reference external" href="https://www.amazon.co.uk/gp/product/B074P726ZR/ref=ppx_yo_dt_b_asin_title_o03_s01?ie=UTF8&amp;psc=1">https://www.amazon.co.uk/gp/product/B074P726ZR/ref=ppx_yo_dt_b_asin_title_o03_s01?ie=UTF8&amp;psc=1</a>).</p></li>
+</ul>
+<section id="process-guide">
+<h2>Process Guide<a class="headerlink" href="#process-guide" title="Permalink to this heading">¶</a></h2>
+<section id="step-1-sort-out-the-hardware">
+<h3>Step 1 - Sort out the hardware<a class="headerlink" href="#step-1-sort-out-the-hardware" title="Permalink to this heading">¶</a></h3>
+<p>The first step would be to make sure that the sound detector is properly
+connected to the Pi.</p>
+<p>To achieve this, we needed three female to female jumper cables
+(brown, black and white). The sound sensor has four prongs but we only
+need three of them to correctly connect them to the Pi:</p>
+<img alt="_images/sound_sensor.png" src="_images/sound_sensor.png" />
+<p>The prongs we need on the sensor are the power (+), the ground (GND) and the
+digital out signal (D0):</p>
+<img alt="_images/sound_sensor_magnified.png" src="_images/sound_sensor_magnified.png" />
+<p>When we then connect the sensor to the Pi, we should see both red lights come
+on (the two LEDs). To make sure that our sensor has the correct sensitivity,
+we need to adjust it so the second led flashes when there is a loud sound
+but not to every sound. We need a flat screwdriver to adjust the blue bit on
+the top until we achieved our desired sensitivity (turn counterclockwise
+until the red light disappears then experimented accordingly):</p>
+<img alt="_images/sound_sensor_adjust.png" src="_images/sound_sensor_adjust.png" />
+<p>We then need to power up our Pi and make sure that the sound sensor is
+working accordingly:</p>
+<img alt="_images/raspberry_pi_power.png" src="_images/raspberry_pi_power.png" />
+</section>
+<section id="step-2-write-the-code">
+<h3>Step 2 - Write the code<a class="headerlink" href="#step-2-write-the-code" title="Permalink to this heading">¶</a></h3>
+</section>
+</section>
 </section>
 
 
@@ -56,6 +103,20 @@
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Step by step guide</a><ul>
+<li><a class="reference internal" href="#process-guide">Process Guide</a><ul>
+<li><a class="reference internal" href="#step-1-sort-out-the-hardware">Step 1 - Sort out the hardware</a></li>
+<li><a class="reference internal" href="#step-2-write-the-code">Step 2 - Write the code</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
   <div>
     <h4>Previous topic</h4>
     <p class="topless"><a href="index.html"
